@@ -137,16 +137,22 @@ fun Login() {
                                     .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.End
                             ) {
-                                Text(text = stringResource(id = R.string.required_field))
+                                if (password.isEmpty()) {
+
+                                    Text(text = stringResource(id = R.string.required_field))
+                                } else {
+                                    Text(text = stringResource(id = R.string.invalid_password))
+                                }
                             }
                         }
                     },
 
-                )
+                    )
                 Spacer(modifier = Modifier.height(32.dp))
                 Button(onClick = {
                     erroEmail = email.isEmpty()
                     erroPassword = password.isEmpty()
+                    erroPassword = password.length <= tamanhoMaximo
                 }) {
                     Text(
                         text = stringResource(id = R.string.enter),

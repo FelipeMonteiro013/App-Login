@@ -6,4 +6,5 @@
     <string name="password">Ingrese su contraseña</string>
     <string name="enter">INGRESAR</string>
     <string name="required_field">Campo obligatorio!</string>
+    <string name="invalid_password">Contraseña inválida!</string>
 </resources>
