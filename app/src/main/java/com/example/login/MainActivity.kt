@@ -1,8 +1,11 @@
 package com.example.login
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,6 +62,15 @@ fun Login() {
         mutableStateOf("")
     }
 
+    val tamanhoMaximo = 8
+
+    var erroEmail by remember {
+        mutableStateOf(false)
+    }
+    var erroPassword by remember {
+        mutableStateOf(false)
+    }
+
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.login),
@@ -68,37 +80,74 @@ fun Login() {
         )
         Text(text = stringResource(id = R.string.subtitle))
         Spacer(modifier = Modifier.height(48.dp))
-        Card(modifier = Modifier
-            .fillMaxWidth()) {
-            Column(modifier = Modifier
+        Card(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(32.dp)) {
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp)
+            ) {
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
                     label = {
                         Text(text = stringResource(id = R.string.email))
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email
                     ),
+                    isError = erroEmail,
+                    supportingText = {
+                        if (erroEmail) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Text(text = stringResource(id = R.string.required_field))
+                            }
+                        }
+                    }
+
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        if (it.length <= tamanhoMaximo) password = it
+                    },
                     modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
                     label = {
                         Text(text = stringResource(id = R.string.password))
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
                     ),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = erroPassword,
+                    supportingText = {
+                        if (erroPassword) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Text(text = stringResource(id = R.string.required_field))
+                            }
+                        }
+                    },
+
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = {
+                    erroEmail = email.isEmpty()
+                    erroPassword = password.isEmpty()
+                }) {
                     Text(
                         text = stringResource(id = R.string.enter),
                         modifier = Modifier
@@ -114,6 +163,6 @@ fun Login() {
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-private fun LoginPreview () {
+private fun LoginPreview() {
     Login()
 }
